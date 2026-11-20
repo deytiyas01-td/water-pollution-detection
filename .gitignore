@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Large Model Weights and Archives (> 100MB cannot be pushed to standard Git/GitHub)
+Models/*.safetensors
+Models/*.bin
+Models/*.pt
+Models/*.pth
+*.zip
+*.tar.gz
+*.7z
+*.rar
+Models-20261120T122226Z-1-001.zip
+
+# Environment & Secrets (NEVER COMMIT OR PUBLISH API KEYS)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# Storage & Temporary Files
+uploads/
+outputs/
+temp/
+*.log
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

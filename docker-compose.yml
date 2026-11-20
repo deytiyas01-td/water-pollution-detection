@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  aquaguard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aquaguard-detection
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - DEVICE=auto
+      - DEFAULT_BOX_THRESHOLD=0.25
+      - DEFAULT_TEXT_THRESHOLD=0.25
+      - API_SECRET_KEY=${API_SECRET_KEY:-}
+    volumes:
+      - ./outputs:/app/outputs
+    deploy:
+      resources:
+        limits:
+          memory: 4G
