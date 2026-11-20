@@ -88,9 +88,14 @@ class WaterPollutionDetector:
     ) -> List[Dict[str, Any]]:
         """
         Runs Grounding DINO zero-shot detection on a PIL Image.
-        Optionally uses accelerated processor_size (e.g. 320x480 for fast video).
-        Grounding DINO maps boxes back to the original image dimensions via target_sizes.
+        Dynamically adapts to CUDA when running under Hugging Face ZeroGPU or local GPU.
         """
+        # Dynamic ZeroGPU / CUDA device sync
+        active_device = "cuda" if torch.cuda.is_available() else "cpu"
+        if active_device != self.device:
+            self.device = active_device
+            self.model = self.model.to(self.device)
+
         w, h = image.size
 
         if processor_size:

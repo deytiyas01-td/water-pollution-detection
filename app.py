@@ -14,6 +14,18 @@ try:
     from backend.config import TARGET_CLASSES, CATEGORY_GROUPS, DEFAULT_BOX_THRESHOLD
     from PIL import Image
 
+    # Hugging Face ZeroGPU dynamic hardware acceleration
+    try:
+        import spaces
+        gpu_decorate = spaces.GPU
+    except Exception:
+        def gpu_decorate(fn=None, duration=None):
+            if fn is not None:
+                return fn
+            def wrapper(f):
+                return f
+            return wrapper
+
     HAS_GRADIO = True
 except ImportError:
     HAS_GRADIO = False
@@ -32,6 +44,7 @@ if HAS_GRADIO:
             detector = WaterPollutionDetector.get_instance()
         return detector
 
+    @gpu_decorate
     def detect_image_gradio(image, threshold, selected_classes):
         if image is None:
             return None, "Please upload an image."
@@ -59,6 +72,7 @@ if HAS_GRADIO:
             
         return annotated, summary
 
+    @gpu_decorate(duration=60)
     def detect_video_gradio(video_path, threshold, speed_mode, selected_classes):
         if not video_path:
             return None, "Please upload a video."
